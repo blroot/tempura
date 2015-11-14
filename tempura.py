@@ -2,13 +2,13 @@ __author__ = 'Bruno Lottero'
 
 
 def main():
-    chunksize = 10
+    chunksize = 1000
     accesslog_parser(chunksize)
 
 
 def accesslog_parser(chunksize):
     chunk = []
-    with open('access.log', 'r') as accesslog:
+    with open('access.log.1', 'r') as accesslog:
         for line in accesslog:
             chunk.append(line.split())
             if len(chunk) == chunksize:
