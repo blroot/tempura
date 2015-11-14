@@ -21,11 +21,21 @@ __author__ = 'Bruno Lottero'
 
 
 def main():
-    chunksize = 1000
+    """
+    Main Function
+    :return:
+    """
+    workers = 4
+    chunksize = 1000                                               # Chunk Norris :-)
     accesslog_parser(chunksize)
 
 
 def accesslog_parser(chunksize):
+    """
+    Parses the access.log file
+    :param chunksize:
+    :return:
+    """
     chunk = []
     with open('access.log', 'r') as accesslog:
         for line in accesslog:
@@ -33,6 +43,19 @@ def accesslog_parser(chunksize):
             if len(chunk) == chunksize:
                 print 'Printing a chunk \n'
                 print chunk
-                #process(chunk) // Do something with this chunk
-                chunk = []
+                #process(chunk) # Do something with this chunk
+                chunk = []                                         # Once processed, destroy
 
+
+def file_block(accesslog, workers):
+    """
+    Seek the file length and return the block size to be processed by a single worker
+    :param accesslog:
+    :param workers:
+    :return:
+    """
+    accesslog.seek(0,2)                                            # Seek until EOF
+    accesslog_size = accesslog.tell()
+    accesslog_block = accesslog_size / workers
+
+    return accesslog_block
