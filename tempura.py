@@ -26,11 +26,11 @@ def main():
     :return:
     """
     workers = 4
-    chunksize = 1000                                               # Chunk Norris :-)
-    accesslog_parser(chunksize)
+    chunk_size = 1000                                                               # Chunk Norris :-) Amount of lines to process simultaneously
+    accesslog_parser_single_threaded(chunk_size)
 
 
-def accesslog_parser(chunksize):
+def accesslog_parser_single_threaded(chunk_size):
     """
     Parses the access.log file
     :param chunksize:
@@ -40,22 +40,57 @@ def accesslog_parser(chunksize):
     with open('access.log', 'r') as accesslog:
         for line in accesslog:
             chunk.append(line.split())
-            if len(chunk) == chunksize:
+            if len(chunk) == chunk_size:
                 print 'Printing a chunk \n'
                 print chunk
                 #process(chunk) # Do something with this chunk
-                chunk = []                                         # Once processed, destroy
+                chunk = []                                                          # Once processed, destroy
 
 
-def file_block(accesslog, workers):
+def accesslog_parser_multi_threaded(workers, chunk_size):
     """
-    Seek the file length and return the block size to be processed by a single worker
-    :param accesslog:
-    :param workers:
+    Parses the access.log file
+    :param chunksize:
     :return:
     """
-    accesslog.seek(0,2)                                            # Seek until EOF
-    accesslog_size = accesslog.tell()
-    accesslog_block = accesslog_size / workers
+    chunk = []
+    with open('access.log', 'r') as accesslog:
+        for worker_number in range(workers):
+            for line in file_block(accesslog, workers, worker_number):
+                chunk.append(tuple(line.split()))
+                if len(chunk) == chunk_size:
+                    print 'Printing a chunk \n'
+                    print chunk
+                    #process(chunk) # Do something with this chunk
+                    chunk = []
 
-    return accesslog_block
+
+def file_block(accesslog, workers, worker):
+    """
+    A generator that splits a file into blocks and iterates
+    over the lines of one of the blocks.
+    Inspired by:
+    https://xor0110.wordpress.com/2013/04/13/how-to-read-a-chunk-of-lines-from-a-file-in-python/
+    :param accesslog:
+    :param workers:
+    :param worker:
+    :return:
+    """
+    assert 0 <= worker and worker < workers
+    assert 0 < workers
+
+    accesslog.seek(0,2)
+    file_size = accesslog.tell()
+
+    ini = file_size * worker / workers
+    end = file_size * (1 + worker) / workers
+
+    if ini <= 0:
+        accesslog.seek(0)
+    else:
+        accesslog.seek(ini-1)
+        accesslog.readline()
+
+    while accesslog.tell() < end:
+        yield accesslog.readline()
+
