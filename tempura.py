@@ -117,6 +117,6 @@ if __name__ == '__main__':
     workers = sys.argv[3]
     chunk_size = sys.argv[2]                                                               # Chunk Norris :-) Amount of lines to process simultaneously
     if sys.argv[1] == 'multi':                                                               # Chunk Norris :-) Amount of lines to process simultaneously
-        accesslog_parser_multi_threaded(workers, chunk_size)
+        accesslog_parser_multi_threaded(workers)
     if sys.argv[1] == 'single':
         accesslog_parser_single_threaded(chunk_size)
