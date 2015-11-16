@@ -52,7 +52,7 @@ def accesslog_parser_single_threaded(chunk_size):
             print 'Printing a chunk \n'
             print chunk
             #process(chunk) # Do something with this chunk
-            chunk = []
+            chunk = []                                                              # Once processed, destroy
 
 
 def accesslog_parser_multi_threaded(workers):
@@ -69,20 +69,19 @@ def spawn_worker(worker_number):
     chunk = []
     workers = int(sys.argv[3])
     chunk_size = int(sys.argv[2])
-    with open('access.log.1', 'r') as accesslog:
+    with open('access.log', 'r') as accesslog:
         for line in file_block(accesslog, workers, worker_number):
             chunk.append(tuple(line.split()))
             if len(chunk) == chunk_size:
                     print 'Worker ' + str(worker_number) + '\n'
-                    #print chunk
+                    print chunk
                     #process(chunk) # Do something with this chunk
-                    chunk = []
+                    chunk = []                                                  # Once processed, destroy
     if chunk:                                                                   # check if there's something left
         print '\n Printing garbage chunk \n'
-        #print chunk
+        print chunk
         #process(chunk) # Do something with this chunk
-        #chunk = []
-        chunk = []
+        chunk = []                                                              # Once processed, destroy
 
 
 def file_block(accesslog, workers, worker):
@@ -120,8 +119,8 @@ if __name__ == '__main__':
     :return:
     """
     workers = int(sys.argv[3])
-    chunk_size = int(sys.argv[2])                                                               # Chunk Norris :-) Amount of lines to process simultaneously
-    if sys.argv[1] == 'multi':                                                               # Chunk Norris :-) Amount of lines to process simultaneously
+    chunk_size = int(sys.argv[2])                                                            # Chunk Norris :-) Amount of lines to process simultaneously
+    if sys.argv[1] == 'multi':
         accesslog_parser_multi_threaded(workers)
     if sys.argv[1] == 'single':
         accesslog_parser_single_threaded(chunk_size)
