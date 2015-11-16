@@ -67,10 +67,8 @@ def accesslog_parser_multi_threaded(workers):
 
 def spawn_worker(worker_number):
     chunk = []
-    #workers = int(sys.argv[3])
-    #chunk_size = int(sys.argv[2])
-    workers = 2
-    chunk_size = 4
+    workers = int(sys.argv[3])
+    chunk_size = int(sys.argv[2])
     with open('access.log.1', 'r') as accesslog:
         for line in file_block(accesslog, workers, worker_number):
             chunk.append(tuple(line.split()))
