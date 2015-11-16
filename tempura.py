@@ -65,10 +65,13 @@ def accesslog_parser_multi_threaded(workers):
 
 
 def spawn_worker(worker_number):
+    chunk = []
+    workers = int(sys.argv[3])
+    chunk_size = int(sys.argv[2])
     with open('access.log.1', 'r') as accesslog:
-        for line in file_block(accesslog, sys.argv[3], worker_number):
+        for line in file_block(accesslog, workers, worker_number):
             chunk.append(tuple(line.split()))
-            if len(chunk) == sys.argv[2]:
+            if len(chunk) == chunk_size:
                     print 'Printing a chunk \n'
                     #print chunk
                     #process(chunk) # Do something with this chunk
@@ -114,8 +117,8 @@ if __name__ == '__main__':
     Main Function
     :return:
     """
-    workers = sys.argv[3]
-    chunk_size = sys.argv[2]                                                               # Chunk Norris :-) Amount of lines to process simultaneously
+    workers = int(sys.argv[3])
+    chunk_size = int(sys.argv[2])                                                               # Chunk Norris :-) Amount of lines to process simultaneously
     if sys.argv[1] == 'multi':                                                               # Chunk Norris :-) Amount of lines to process simultaneously
         accesslog_parser_multi_threaded(workers)
     if sys.argv[1] == 'single':
