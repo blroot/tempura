@@ -52,6 +52,7 @@ def accesslog_parser_single_threaded(chunk_size):
             print 'Printing a chunk \n'
             print chunk
             #process(chunk) # Do something with this chunk
+            chunk = []
 
 
 def accesslog_parser_multi_threaded(workers):
