@@ -8,15 +8,16 @@ parsing SQUID accesslog files and saving records to DB
 
 Some tests so far
 
-tempura.py [single|multi] [chunk_size] [threads]
+Usage atm:
+- tempura.py [single|multi] [chunk_size] [threads]
 
-# time python tempura.py single 1000
+> time python tempura.py single 1000
 
 real    0m3.215s
 user    0m3.064s
 sys     0m0.140s
 
-time python tempura.py multi 1000 8
+> time python tempura.py multi 1000 8
 
 real    0m1.541s
 user    0m5.720s
