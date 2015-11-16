@@ -27,9 +27,8 @@ def main():
     :return:
     """
     workers = 4
-    chunk_size = 1000                                                                 # Chunk Norris :-) Amount of lines to process simultaneously
-    pool = Pool(processes=4)
-    pool.map(accesslog_parser_multi_threaded(workers, chunk_size), [workers, chunk_size])
+    chunk_size = 1000                                                               # Chunk Norris :-) Amount of lines to process simultaneously
+    accesslog_parser_multi_threaded(workers, chunk_size)
 
 
 def accesslog_parser_single_threaded(chunk_size):
@@ -105,3 +104,11 @@ def file_block(accesslog, workers, worker):
     while accesslog.tell() < end:
         yield accesslog.readline()
 
+if __name__ == '__main__':
+    """
+    Main Function
+    :return:
+    """
+    workers = 4
+    chunk_size = 1000                                                               # Chunk Norris :-) Amount of lines to process simultaneously
+    accesslog_parser_multi_threaded(workers, chunk_size)
