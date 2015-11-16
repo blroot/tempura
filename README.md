@@ -6,10 +6,10 @@ parsing SQUID accesslog files and saving records to DB
 - It is recommended running under PyPy for more speed
 - Multi Threading is a desired feature
 
-Some tests so far
-
 Usage atm:
 - tempura.py [single|multi] [chunk_size] [threads]
+
+Some tests so far
 
 > time python tempura.py single 1000
 
