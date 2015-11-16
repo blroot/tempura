@@ -19,6 +19,7 @@ along with Tempura.  If not, see <http://www.gnu.org/licenses/>.
 
 __author__ = 'Bruno Lottero'
 
+from multiprocessing import Pool
 
 def main():
     """
@@ -26,8 +27,9 @@ def main():
     :return:
     """
     workers = 4
-    chunk_size = 1000                                                               # Chunk Norris :-) Amount of lines to process simultaneously
-    accesslog_parser_single_threaded(chunk_size)
+    chunk_size = 1000                                                                 # Chunk Norris :-) Amount of lines to process simultaneously
+    pool = Pool(processes=4)
+    pool.map(accesslog_parser_multi_threaded(workers, chunk_size), [workers, chunk_size])
 
 
 def accesslog_parser_single_threaded(chunk_size):
@@ -39,12 +41,16 @@ def accesslog_parser_single_threaded(chunk_size):
     chunk = []
     with open('access.log', 'r') as accesslog:
         for line in accesslog:
-            chunk.append(line.split())
+            chunk.append(tuple(line.split()))
             if len(chunk) == chunk_size:
                 print 'Printing a chunk \n'
                 print chunk
                 #process(chunk) # Do something with this chunk
                 chunk = []                                                          # Once processed, destroy
+        if chunk:                                                                   # check if there's something left
+            print 'Printing a chunk \n'
+            print chunk
+            #process(chunk) # Do something with this chunk
 
 
 def accesslog_parser_multi_threaded(workers, chunk_size):
@@ -54,7 +60,7 @@ def accesslog_parser_multi_threaded(workers, chunk_size):
     :return:
     """
     chunk = []
-    with open('access.log', 'r') as accesslog:
+    with open('access.log.1', 'r') as accesslog:
         for worker_number in range(workers):
             for line in file_block(accesslog, workers, worker_number):
                 chunk.append(tuple(line.split()))
@@ -63,6 +69,11 @@ def accesslog_parser_multi_threaded(workers, chunk_size):
                     print chunk
                     #process(chunk) # Do something with this chunk
                     chunk = []
+        if chunk:                                                                   # check if there's something left
+            print 'Printing a chunk \n'
+            print chunk
+            #process(chunk) # Do something with this chunk
+            chunk = []
 
 
 def file_block(accesslog, workers, worker):
