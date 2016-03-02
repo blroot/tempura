@@ -1,9 +1,10 @@
 # tempura
 
-This project is intented to be a simple and fast solution for
-parsing SQUID accesslog files and saving records to DB
+THIS IS AN EXPERIMENTAL PROJECT - So, don't expect it to do anything useful
 
-- It is recommended running under PyPy for more speed
+This project is intented to be a simple and fast solution for
+parsing SQUID accesslog files
+
 - Multi Threading is a desired feature
 
 Usage atm:
